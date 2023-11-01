@@ -20,7 +20,7 @@ export class ProduitController {
   constructor(private readonly produitService: ProduitService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   create(
     @Body() createProduitDto: CreateProduitDto,
     @GetUser() utilisateur: Utilisateur,
@@ -40,7 +40,7 @@ export class ProduitController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   update(
     @Param('id') id: string,
     @Body() updateProduitDto: UpdateProduitDto,
@@ -51,7 +51,7 @@ export class ProduitController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
     return this.produitService.remove(+id);
   }
