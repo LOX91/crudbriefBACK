@@ -1,9 +1,13 @@
+
+
+
 create table utilisateur (
 
 id SERIAL primary key,
 nom VARCHAR(255) not null,
 prenom VARCHAR(255) not null,
-password char (60) not null
+email VARCHAR(255) not null unique,
+mot_de_passe VARCHAR(255) not null
 
 );
 
@@ -22,3 +26,7 @@ foreign key (id_categorie) references categorie(id)
 
 
 );
+
+
+
+drop table utilisateur ;
