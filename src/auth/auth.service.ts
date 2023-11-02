@@ -61,7 +61,7 @@ export class AuthService {
       (await bcrypt.compare(mot_de_passe, utilisateur.mot_de_passe))
     ) {
       const payload = { email };
-      const accessToken = await this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload);
       return { accessToken };
     } else {
       throw new UnauthorizedException(

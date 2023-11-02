@@ -13,6 +13,7 @@ export class Utilisateur {
 
   @Column()
   email: string;
+
   @Column()
   mot_de_passe: string;
 }

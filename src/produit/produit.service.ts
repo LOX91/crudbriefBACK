@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProduitDto } from './dto/create-produit.dto';
 import { UpdateProduitDto } from './dto/update-produit.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,18 +20,28 @@ export class ProduitService {
     return this.produitRepository.find();
   }
 
-  findOne(id: number) {
-    return this.produitRepository.findOne({ where: { id: id } });
+  async findOne(id: number) {
+    const produit = await this.produitRepository.findOne({ where: { id: id } });
+    if (!produit) {
+      throw new NotFoundException(`Le produit avec l'id ${id} n'existe pas`);
+    }
+    return produit;
   }
 
   async update(id: number, updateProduitDto: UpdateProduitDto) {
-    await this.produitRepository.update(id, updateProduitDto);
-    return this.findOne(id);
+    const produit = await this.findOne(id);
+    const produitMisAJour = this.produitRepository.merge(
+      produit,
+      updateProduitDto,
+    );
+
+    const resultat = await this.produitRepository.save(produitMisAJour);
+    return { message: 'Le produit a été modifié', data: resultat };
   }
 
   async remove(id_produit: number) {
-    return this.produitRepository.delete(id_produit);
-
-    // return { message: `LE PRODUIT ${produitToRemove.nom} est supprimé !` };
+    const produit = await this.findOne(id_produit);
+    const produitSupprime = await this.produitRepository.remove(produit);
+    return { message: 'Le produit a été supprimé', data: produitSupprime };
   }
 }
